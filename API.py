@@ -29,7 +29,9 @@ class MainWindow(QMainWindow):
         self.static_api_server = "http://static-maps.yandex.ru/1.x/"
         self.get_image()
         self.update_image()
-        self.change = 0
+        self.change_spn = 0
+        self.change_coord_x = 37.6
+        self.change_coord_y = 55.75
 
     def get_image(self):
         coodrinates = f"{self.coord_x},{self.coord_y}"
@@ -58,15 +60,35 @@ class MainWindow(QMainWindow):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
-            self.change -= 1
+            self.change_spn -= 1
         elif event.key() == Qt.Key_PageDown:
-            self.change += 1
-        if self.change > 40:
-            self.change = 40
-        if self.change < 0.01:
-            self.change = 0.01
-        self.spn = self.change
-        print(self.change, self.spn)
+            self.change_spn += 1
+        if self.change_spn > 40:
+            self.change_spn = 40
+        if self.change_spn < 0.01:
+            self.change_spn = 0.01
+        self.spn = self.change_spn
+        print(self.spn)
+
+        if event.key() == Qt.Key_Up:
+            self.change_coord_y += 0.5
+        elif event.key() == Qt.Key_Down:
+            self.change_coord_y -= 0.5
+        elif event.key() == Qt.Key_Left:
+            self.change_coord_x -= 0.5
+        elif event.key() == Qt.Key_Right:
+            self.change_coord_x += 0.5
+        if self.change_coord_y > 85:
+            self.change_coord_y = 85
+        if self.change_coord_y < -85:
+            self.change_coord_y = - 85
+        if self.change_coord_x < - 170:
+            self.change_coord_x = -170
+        if self.change_coord_x > 170:
+            self.change_coord_x = 170
+        print(self.change_coord_x, self.change_coord_y)
+        self.coord_x = self.change_coord_x
+        self.coord_y = self.change_coord_y
         self.get_image()
         self.update_image()
         self.update()
